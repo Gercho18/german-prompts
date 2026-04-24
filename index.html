@@ -564,7 +564,7 @@ function renderGrid(list) {
     const gc = gradClass(prompts.indexOf(p));
     const hasImg = p.img && p.img.trim().length > 0;
     const thumbHtml = hasImg
-      ? `<img class="thumb-img" src="${esc(p.img)}" alt="${esc(p.title)}" loading="lazy" decoding="async" onload="this.classList.add('loaded')" onerror="this.style.display='none'">`
+      ? `<img class="thumb-img" src="${esc(p.img)}" alt="${esc(p.title)}" decoding="async" onload="this.classList.add('loaded')" onerror="this.style.display='none'">`
       : '';
     return `<div class="card" onclick="openPrompt('${p.id}')" style="animation:fadeUp .4s ${i * .07}s ease both">
       <div class="thumb ${gc}">

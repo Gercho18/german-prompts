@@ -1,6 +1,15 @@
 [build]
   publish = "."
 
+[[edge_functions]]
+  path = "/prompt/*"
+  function = "prompt"
+
+[[redirects]]
+  from = "/prompt/*"
+  to = "/"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]

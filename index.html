@@ -604,7 +604,7 @@ function openPrompt(id) {
   if (hasImg) {
     mi.src = p.img;
     mi.alt = p.title;
-    mi.loading = 'lazy';
+    mi.loading = 'eager';
     mi.decoding = 'async';
     mi.classList.remove('loaded');
     mi.onload = () => mi.classList.add('loaded');

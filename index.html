@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Todos los prompts de IA que comparte @german.dsg en Instagram. Copiá y usá gratis.">
+<title>Prompts de IA · @german.dsg</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0C0A06;
+  --s1:#141109;
+  --s2:#1C1810;
+  --s3:#242018;
+  --b1:rgba(240,200,58,0.07);
+  --b2:rgba(240,200,58,0.18);
+  --y:#F0C83A;
+  --y2:#E8B830;
+  --ys:rgba(240,200,58,0.13);
+  --ys2:rgba(240,200,58,0.06);
+  --tx:#F5EED8;
+  --mu:#7A6E58;
+  --di:#3A3528;
+  --wh:rgba(255,255,255,0.04);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;font-size:14px;line-height:1.5;min-height:600px;overflow-x:hidden}
+
+.bg-glow{position:fixed;top:-120px;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(240,200,58,0.04) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+.wrap{max-width:680px;margin:0 auto;padding:40px 20px 72px;position:relative;z-index:1}
+
+/* HEADER */
+.hdr{text-align:center;margin-bottom:40px;animation:fadeUp .55s ease both}
+.hdr-badge{display:inline-flex;align-items:center;gap:6px;background:var(--ys);border:1px solid var(--b2);border-radius:99px;padding:5px 14px;font-size:11px;font-weight:500;color:var(--y);letter-spacing:.04em;margin-bottom:16px}
+.hdr-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--y);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr-name{font-size:32px;font-weight:700;color:var(--tx);letter-spacing:-.5px;line-height:1;margin-bottom:8px}
+.hdr-name em{color:var(--y);font-style:normal}
+.hdr-sub{font-size:13px;font-weight:300;color:var(--mu);line-height:1.6;max-width:300px;margin:0 auto}
+
+/* FILTER */
+.filters{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;animation:fadeUp .5s .1s ease both}
+.f-btn{padding:5px 14px;border-radius:99px;border:1px solid var(--b1);background:transparent;color:var(--mu);font-family:'Inter',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .18s;letter-spacing:.02em}
+.f-btn:hover{color:var(--tx);border-color:var(--b2)}
+.f-btn.on{background:var(--ys);border-color:var(--b2);color:var(--y)}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;animation:fadeUp .5s .15s ease both}
+@media(max-width:460px){.grid{grid-template-columns:1fr}}
+
+/* CARD */
+.card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),border-color .25s,box-shadow .25s;position:relative}
+.card:hover{transform:translateY(-5px) scale(1.01);border-color:var(--b2);box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 0 1px var(--b1),0 0 30px rgba(240,200,58,0.07)}
+.card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,200,58,0.03) 0%,transparent 60%);opacity:0;transition:opacity .25s;border-radius:14px;pointer-events:none}
+.card:hover::after{opacity:1}
+
+/* THUMBNAIL */
+.thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;flex-shrink:0}
+.thumb-img{width:100%;height:100%;object-fit:cover;transition:transform .35s cubic-bezier(.2,.8,.2,1);display:none}
+.thumb-img.loaded{display:block}
+.thumb-gradient{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.thumb-icon{font-size:36px;filter:drop-shadow(0 2px 12px rgba(0,0,0,.5));transition:transform .3s;z-index:1;position:relative}
+.card:hover .thumb-icon{transform:scale(1.1)}
+.card:hover .thumb-img{transform:scale(1.05)}
+.thumb-shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.06) 0%,transparent 50%);pointer-events:none}
+.thumb-tag{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:99px;padding:3px 10px;font-size:10px;font-weight:500;color:var(--tx);letter-spacing:.04em;z-index:2}
+.thumb-new{position:absolute;top:10px;right:10px;background:var(--y);border-radius:99px;padding:3px 8px;font-size:9px;font-weight:700;color:#0C0A06;letter-spacing:.06em;z-index:2;text-transform:uppercase}
+
+/* CARD BODY */
+.cbody{padding:14px 16px 16px}
+.c-tool{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--y);margin-bottom:5px;opacity:.8}
+.c-title{font-size:14px;font-weight:600;color:var(--tx);line-height:1.3;margin-bottom:6px}
+.c-desc{font-size:12px;color:var(--mu);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.c-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--b1)}
+.c-date{font-size:10px;color:var(--di)}
+.c-arrow{width:22px;height:22px;border-radius:50%;background:var(--ys);display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--y)}
+.card:hover .c-arrow{background:var(--y);color:#0C0A06}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 0;grid-column:1/-1;color:var(--mu);font-size:13px}
+.empty-icon{font-size:36px;margin-bottom:12px;opacity:.3}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .28s ease}
+.overlay.open{opacity:1;pointer-events:all}
+.overlay-bg{position:absolute;inset:0;background:rgba(8,6,2,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.modal{position:relative;z-index:1;width:100%;max-width:480px;max-height:88vh;background:var(--s2);border:1px solid rgba(240,200,58,0.15);border-radius:18px;overflow:hidden;transform:scale(.94) translateY(14px);transition:transform .3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.overlay.open .modal{transform:scale(1) translateY(0)}
+.modal-thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;flex-shrink:0}
+.modal-thumb-img{width:100%;height:100%;object-fit:cover;display:none}
+.modal-thumb-img.loaded{display:block}
+.modal-thumb-gradient{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.modal-thumb-icon{font-size:56px;filter:drop-shadow(0 4px 20px rgba(0,0,0,.6))}
+.modal-thumb-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--s2) 100%)}
+.modal-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--tx);font-size:16px;z-index:10;transition:all .15s;line-height:1}
+.modal-close:hover{background:rgba(0,0,0,.8);transform:scale(1.08)}
+.modal-body{padding:20px 22px 22px;overflow-y:auto;flex:1}
+.modal-body::-webkit-scrollbar{width:3px}
+.modal-body::-webkit-scrollbar-thumb{background:var(--di);border-radius:99px}
+.modal-tool{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--y);margin-bottom:6px}
+.modal-title{font-size:18px;font-weight:700;color:var(--tx);line-height:1.2;margin-bottom:8px;letter-spacing:-.2px}
+.modal-desc{font-size:13px;color:var(--mu);line-height:1.6;margin-bottom:18px}
+.prompt-box-wrap{background:var(--s3);border:1px solid var(--b1);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.prompt-box-hdr{padding:9px 14px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between}
+.prompt-box-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--di)}
+.copy-btn{display:inline-flex;align-items:center;gap:5px;background:var(--y);border:none;border-radius:6px;padding:5px 12px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#0C0A06;cursor:pointer;transition:all .18s}
+.copy-btn:hover{background:var(--y2);transform:scale(1.03)}
+.copy-btn.ok{background:#2d9e6b;color:#fff}
+.prompt-text{padding:14px;font-size:12px;color:var(--tx);line-height:1.75;white-space:pre-wrap;word-break:break-word;max-height:180px;overflow-y:auto;font-family:'Inter',sans-serif}
+.prompt-text::-webkit-scrollbar{width:3px}
+.prompt-text::-webkit-scrollbar-thumb{background:var(--di);border-radius:99px}
+.modal-date{font-size:11px;color:var(--di)}
+
+/* ADMIN FAB */
+.admin-fab{position:fixed;bottom:20px;right:20px;width:36px;height:36px;border-radius:50%;background:var(--s2);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mu);font-size:14px;z-index:100;transition:all .18s}
+.admin-fab:hover{color:var(--y);border-color:var(--y)}
+
+/* ADMIN MODAL */
+.amodal{position:relative;z-index:1;width:100%;max-width:500px;max-height:92vh;background:var(--s2);border:1px solid rgba(240,200,58,0.15);border-radius:18px;overflow:hidden;transform:scale(.94) translateY(14px);transition:transform .3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.overlay.open .amodal{transform:scale(1) translateY(0)}
+.amodal-hdr{padding:18px 20px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.amodal-title{font-size:15px;font-weight:700;color:var(--tx)}
+.amodal-title span{color:var(--y)}
+.amodal-body{padding:16px 20px 20px;overflow-y:auto;flex:1}
+.amodal-body::-webkit-scrollbar{width:3px}
+.amodal-body::-webkit-scrollbar-thumb{background:var(--di);border-radius:99px}
+.aitem{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:8px;margin-bottom:8px}
+.aitem-icon{font-size:20px;flex-shrink:0}
+.aitem-info{flex:1;min-width:0}
+.aitem-name{font-size:13px;font-weight:500;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aitem-meta{font-size:11px;color:var(--mu);margin-top:1px}
+.aitem-btns{display:flex;gap:5px}
+.ibtn{width:26px;height:26px;border-radius:5px;border:1px solid var(--b1);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--mu);transition:all .15s;font-size:12px}
+.ibtn:hover{color:var(--tx);border-color:var(--b2)}
+.ibtn.del:hover{color:#f09595;border-color:rgba(200,50,50,.3);background:rgba(200,50,50,.08)}
+
+/* PUBLISH BANNER */
+.pub-banner{background:var(--ys2);border:1px solid var(--b2);border-radius:8px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:var(--mu);line-height:1.6}
+.pub-banner strong{color:var(--y);display:block;margin-bottom:4px;font-size:13px}
+
+/* FORM */
+.fgroup{margin-bottom:12px}
+label{display:block;font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:5px}
+input,select,textarea{width:100%;background:var(--s1);border:1px solid var(--b1);border-radius:7px;padding:8px 11px;color:var(--tx);font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border .15s}
+input:focus,select:focus,textarea:focus{border-color:rgba(240,200,58,.4)}
+select option{background:var(--s2)}
+textarea{resize:vertical;min-height:90px;line-height:1.6}
+.grow2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:7px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all .18s}
+.btn-y{background:var(--y);color:#0C0A06}
+.btn-y:hover{background:var(--y2)}
+.btn-g{background:var(--s3);color:var(--mu);border:1px solid var(--b1)}
+.btn-g:hover{color:var(--tx)}
+.btn-pub{background:transparent;color:var(--y);border:1px solid var(--b2);padding:6px 12px;font-size:12px}
+.btn-pub:hover{background:var(--ys)}
+.btn-row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.sep{border:none;border-top:1px solid var(--b1);margin:14px 0}
+.err-msg{color:#f09595;font-size:12px;margin-top:6px;display:none}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.g0{background:linear-gradient(135deg,#1a1206 0%,#2d1f0a 50%,#1a1509 100%)}
+.g1{background:linear-gradient(135deg,#0e1520 0%,#1a2535 50%,#0d1118 100%)}
+.g2{background:linear-gradient(135deg,#170d1f 0%,#271040 50%,#140a1a 100%)}
+.g3{background:linear-gradient(135deg,#0e1a12 0%,#152b1c 50%,#0a1410 100%)}
+.g4{background:linear-gradient(135deg,#1f0f0a 0%,#3a1808 50%,#180a06 100%)}
+.g5{background:linear-gradient(135deg,#0f1418 0%,#1d2d3a 50%,#0b1018 100%)}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-badge">@german.dsg · Prompts de IA</div>
+    <h1 class="hdr-name">Prompts <em>gratis</em></h1>
+    <p class="hdr-sub">Todos los prompts que comparto en Instagram. Copiá y usá.</p>
+  </div>
+  <div class="filters" id="filterBar">
+    <button class="f-btn on" onclick="setFilter('all',this)">Todos</button>
+  </div>
+  <div class="grid" id="grid">
+    <div class="empty"><div class="empty-icon">✦</div>Cargando...</div>
+  </div>
+</div>
+
+<!-- ADMIN FAB -->
+<button class="admin-fab" onclick="openLogin()" title="Admin">⚙</button>
+
+<!-- PROMPT MODAL -->
+<div class="overlay" id="pOverlay" onclick="closePModal(event)">
+  <div class="overlay-bg"></div>
+  <div class="modal" id="pModal">
+    <div class="modal-thumb" id="mThumb">
+      <div class="modal-thumb-gradient" id="mThumbGrad"><div class="modal-thumb-icon" id="mThumbIcon">✨</div></div>
+      <img class="modal-thumb-img" id="mThumbImg" alt="">
+      <div class="modal-thumb-overlay"></div>
+    </div>
+    <button class="modal-close" onclick="closePModalDirect()">✕</button>
+    <div class="modal-body">
+      <div class="modal-tool" id="mTool"></div>
+      <div class="modal-title" id="mTitle"></div>
+      <div class="modal-desc" id="mDesc"></div>
+      <div class="prompt-box-wrap">
+        <div class="prompt-box-hdr">
+          <span class="prompt-box-label">Prompt</span>
+          <button class="copy-btn" id="copyBtn" onclick="doCopy()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar prompt
+          </button>
+        </div>
+        <div class="prompt-text" id="mPrompt"></div>
+      </div>
+      <div class="modal-date" id="mDate"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="lOverlay" onclick="closeOverlay('lOverlay',event)">
+  <div class="overlay-bg"></div>
+  <div class="amodal" style="max-width:320px">
+    <div class="amodal-hdr">
+      <div class="amodal-title">Acceso <span>admin</span></div>
+      <button class="modal-close" style="position:static;background:var(--s3)" onclick="closeOvDirect('lOverlay')">✕</button>
+    </div>
+    <div class="amodal-body">
+      <div class="fgroup">
+        <label>Contraseña</label>
+        <input type="password" id="passInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        <div class="err-msg" id="loginErr">Contraseña incorrecta</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-g" onclick="closeOvDirect('lOverlay')">Cancelar</button>
+        <button class="btn btn-y" onclick="doLogin()">Entrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="overlay" id="aOverlay" onclick="closeOverlay('aOverlay',event)">
+  <div class="overlay-bg"></div>
+  <div class="amodal">
+    <div class="amodal-hdr">
+      <div class="amodal-title">Panel <span>admin</span></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-pub" onclick="exportHTML()">↓ Publicar</button>
+        <button class="btn btn-y" style="padding:6px 12px;font-size:12px" onclick="openForm(null)">+ Agregar</button>
+        <button class="modal-close" style="position:static;background:var(--s3)" onclick="closeOvDirect('aOverlay')">✕</button>
+      </div>
+    </div>
+    <div class="amodal-body">
+      <div class="pub-banner">
+        <strong>¿Cómo publicar cambios?</strong>
+        Agregá o editá prompts acá, luego hacé clic en <strong style="color:var(--y)">↓ Publicar</strong> para descargar el HTML actualizado y subilo a Netlify.
+      </div>
+      <div id="aList"></div>
+      <div class="sep"></div>
+      <div class="fgroup">
+        <label>Cambiar contraseña</label>
+        <div style="display:flex;gap:8px">
+          <input type="password" id="newPass" placeholder="Nueva contraseña (mínimo 4 caracteres)">
+          <button class="btn btn-g" style="white-space:nowrap;flex-shrink:0" onclick="changePass()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM MODAL -->
+<div class="overlay" id="fOverlay" onclick="closeOverlay('fOverlay',event)">
+  <div class="overlay-bg"></div>
+  <div class="amodal">
+    <div class="amodal-hdr">
+      <div class="amodal-title" id="fModalTitle">Nuevo <span>prompt</span></div>
+      <button class="modal-close" style="position:static;background:var(--s3)" onclick="closeOvDirect('fOverlay')">✕</button>
+    </div>
+    <div class="amodal-body">
+      <input type="hidden" id="fId">
+      <div class="fgroup">
+        <label>Título</label>
+        <input type="text" id="fTitle" placeholder="ej: Restauración de foto a 4K">
+      </div>
+      <div class="fgroup">
+        <label>Descripción corta</label>
+        <input type="text" id="fDesc" placeholder="ej: Para rescatar fotos antiguas o en baja calidad">
+      </div>
+      <div class="grow2">
+        <div class="fgroup">
+          <label>Herramienta</label>
+          <select id="fTool">
+            <option>Magnific AI</option><option>Topaz Photo AI</option>
+            <option>Adobe Firefly</option><option>Midjourney</option>
+            <option>ChatGPT</option><option>Claude</option>
+            <option>Stable Diffusion</option><option>Krea AI</option>
+            <option>Runway</option><option>Kling AI</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="fgroup">
+          <label>Categoría</label>
+          <select id="fCat">
+            <option>Restauración</option><option>Upscaling</option>
+            <option>Generación</option><option>Edición</option>
+            <option>Tipografía</option><option>Branding</option>
+            <option>Motion</option><option>Video</option>
+            <option>Copywriting</option><option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgroup">
+        <label>Prompt completo</label>
+        <textarea id="fPrompt" style="min-height:110px" placeholder="Pegá el prompt acá..."></textarea>
+      </div>
+      <div class="grow2">
+        <div class="fgroup">
+          <label>Emoji / ícono</label>
+          <input type="text" id="fIcon" placeholder="🖼" maxlength="4">
+        </div>
+        <div class="fgroup">
+          <label>URL de imagen (opcional)</label>
+          <input type="text" id="fImg" placeholder="https://...">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-g" onclick="closeOvDirect('fOverlay')">Cancelar</button>
+        <button class="btn btn-y" onclick="savePrompt()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────
+const SK = 'german_prompts_v2';
+const PK = 'german_pass_v2';
+const DEF_PASS = 'german2025';
+const GRADS = ['g0','g1','g2','g3','g4','g5'];
+let prompts = [], filter = 'all', activePrompt = null;
+
+// ── PROMPTS PUBLICADOS ───────────────────────────────────────────
+// Este array es el que ven todos los visitantes.
+// Para actualizar: agregá prompts desde el panel admin → "↓ Publicar" → reemplazá este archivo en Netlify.
+const PUBLISHED = [{"id":"s1","title":"Restauración de foto a 4K","desc":"Para rescatar fotos antiguas, borrosas o comprimidas. Resultado fotorrealista.","tool":"Magnific AI","cat":"Restauración","icon":"🖼","img":"","prompt":"Enhance this old/low quality photograph to ultra-high definition 4K resolution. Preserve all original details, faces, and textures. Restore natural colors, fix grain, noise, and compression artifacts. Make the image look as if it was originally taken with a modern professional camera. Do not add elements that were not in the original photo. Output: photorealistic, sharp, high detail.","date":"Abril 2025","isNew":true}];
+
+// ── STORAGE (localStorage) ───────────────────────────────────────
+function load() {
+  try {
+    const r = localStorage.getItem(SK);
+    prompts = r ? JSON.parse(r) : [...PUBLISHED];
+  } catch(e) {
+    prompts = [...PUBLISHED];
+  }
+  render();
+}
+
+function save() {
+  try { localStorage.setItem(SK, JSON.stringify(prompts)); } catch(e) {}
+}
+
+function getPass() {
+  try { return localStorage.getItem(PK) || DEF_PASS; } catch(e) { return DEF_PASS; }
+}
+
+function setPass(p) {
+  try { localStorage.setItem(PK, p); } catch(e) {}
+}
+
+// ── EXPORT / PUBLICAR ────────────────────────────────────────────
+function exportHTML() {
+  const html = document.documentElement.outerHTML;
+  const newData = JSON.stringify(prompts);
+  // Reemplaza el array PUBLISHED en el HTML descargado con los prompts actuales
+  const updated = html.replace(
+    /const PUBLISHED = \[[\s\S]*?\];/,
+    'const PUBLISHED = ' + newData + ';'
+  );
+  const blob = new Blob([updated], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'index.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── RENDER ───────────────────────────────────────────────────────
+function getTools() { return [...new Set(prompts.map(p => p.tool))]; }
+
+function render() { renderFilters(); renderGrid(); }
+
+function renderFilters() {
+  const tools = getTools();
+  document.getElementById('filterBar').innerHTML =
+    `<button class="f-btn ${filter==='all'?'on':''}" onclick="setFilter('all',this)">Todos (${prompts.length})</button>` +
+    tools.map(t => `<button class="f-btn ${filter===t?'on':''}" onclick="setFilter('${esc(t)}',this)">${esc(t)}</button>`).join('');
+}
+
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderGrid();
+}
+
+function gradClass(idx) { return GRADS[idx % GRADS.length]; }
+
+function renderGrid() {
+  const g = document.getElementById('grid');
+  const list = filter === 'all' ? prompts : prompts.filter(p => p.tool === filter);
+  if (!list.length) {
+    g.innerHTML = `<div class="empty"><div class="empty-icon">✦</div>No hay prompts todavía.<br>Agregá el primero desde el panel admin.</div>`;
+    return;
+  }
+  g.innerHTML = list.map((p, i) => {
+    const gc = gradClass(prompts.indexOf(p));
+    const hasImg = p.img && p.img.trim().length > 0;
+    const thumbHtml = hasImg
+      ? `<img class="thumb-img" src="${esc(p.img)}" alt="" onload="this.classList.add('loaded')" onerror="this.style.display='none'">`
+      : '';
+    return `<div class="card" onclick="openPrompt('${p.id}')" style="animation:fadeUp .4s ${i * .07}s ease both">
+      <div class="thumb ${gc}">
+        ${thumbHtml}
+        <div class="thumb-gradient"><div class="thumb-icon">${p.icon || '✨'}</div></div>
+        <div class="thumb-shine"></div>
+        <div class="thumb-tag">${esc(p.cat)}</div>
+        ${p.isNew ? '<div class="thumb-new">Nuevo</div>' : ''}
+      </div>
+      <div class="cbody">
+        <div class="c-tool">${esc(p.tool)}</div>
+        <div class="c-title">${esc(p.title)}</div>
+        <div class="c-desc">${esc(p.desc)}</div>
+        <div class="c-footer">
+          <span class="c-date">${esc(p.date || '')}</span>
+          <div class="c-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── PROMPT MODAL ─────────────────────────────────────────────────
+function openPrompt(id) {
+  const p = prompts.find(x => x.id === id);
+  if (!p) return;
+  activePrompt = p;
+  document.getElementById('mTool').textContent = p.tool + ' · ' + p.cat;
+  document.getElementById('mTitle').textContent = p.title;
+  document.getElementById('mDesc').textContent = p.desc || '';
+  document.getElementById('mPrompt').textContent = p.prompt;
+  document.getElementById('mDate').textContent = p.date || '';
+  document.getElementById('mThumbIcon').textContent = p.icon || '✨';
+  const gi = prompts.indexOf(p);
+  document.getElementById('mThumbGrad').className = 'modal-thumb-gradient ' + gradClass(gi);
+  const mi = document.getElementById('mThumbImg');
+  if (p.img && p.img.trim()) {
+    mi.src = p.img;
+    mi.classList.remove('loaded');
+    mi.onload = () => mi.classList.add('loaded');
+    mi.onerror = () => mi.style.display = 'none';
+  } else {
+    mi.classList.remove('loaded');
+    mi.src = '';
+  }
+  const cb = document.getElementById('copyBtn');
+  cb.className = 'copy-btn';
+  cb.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copiar prompt`;
+  document.getElementById('pOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function doCopy() {
+  if (!activePrompt) return;
+  navigator.clipboard.writeText(activePrompt.prompt).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.className = 'copy-btn ok';
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => {
+      btn.className = 'copy-btn';
+      btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copiar prompt`;
+    }, 2200);
+  });
+}
+
+function closePModal(e) {
+  if (e.target === document.getElementById('pOverlay') || e.target.classList.contains('overlay-bg'))
+    closePModalDirect();
+}
+function closePModalDirect() {
+  document.getElementById('pOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeOverlay(id, e) {
+  if (e.target === document.getElementById(id) || e.target.classList.contains('overlay-bg'))
+    closeOvDirect(id);
+}
+function closeOvDirect(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── AUTH ─────────────────────────────────────────────────────────
+function openLogin() {
+  document.getElementById('passInput').value = '';
+  document.getElementById('loginErr').style.display = 'none';
+  document.getElementById('lOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('passInput').focus(), 200);
+}
+
+function doLogin() {
+  const entered = document.getElementById('passInput').value;
+  if (entered === getPass()) {
+    closeOvDirect('lOverlay');
+    openAdmin();
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+  }
+}
+
+function openAdmin() {
+  renderAdminList();
+  document.getElementById('aOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// ── ADMIN CRUD ───────────────────────────────────────────────────
+function renderAdminList() {
+  const list = document.getElementById('aList');
+  if (!prompts.length) {
+    list.innerHTML = `<div style="text-align:center;padding:16px;color:var(--mu);font-size:13px">Sin prompts. Agregá el primero.</div>`;
+    return;
+  }
+  list.innerHTML = prompts.map(p => `
+    <div class="aitem">
+      <div class="aitem-icon">${p.icon || '✨'}</div>
+      <div class="aitem-info">
+        <div class="aitem-name">${esc(p.title)}</div>
+        <div class="aitem-meta">${esc(p.tool)} · ${esc(p.cat)}</div>
+      </div>
+      <div class="aitem-btns">
+        <button class="ibtn" onclick="openForm('${p.id}')" title="Editar">✎</button>
+        <button class="ibtn del" onclick="delPrompt('${p.id}')" title="Eliminar">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function openForm(id) {
+  const p = id ? prompts.find(x => x.id === id) : null;
+  document.getElementById('fId').value = id || '';
+  document.getElementById('fModalTitle').innerHTML = p ? 'Editar <span>prompt</span>' : 'Nuevo <span>prompt</span>';
+  document.getElementById('fTitle').value = p?.title || '';
+  document.getElementById('fDesc').value = p?.desc || '';
+  document.getElementById('fTool').value = p?.tool || 'Magnific AI';
+  document.getElementById('fCat').value = p?.cat || 'Restauración';
+  document.getElementById('fPrompt').value = p?.prompt || '';
+  document.getElementById('fIcon').value = p?.icon || '✨';
+  document.getElementById('fImg').value = p?.img || '';
+  document.getElementById('fOverlay').classList.add('open');
+}
+
+function savePrompt() {
+  const title = document.getElementById('fTitle').value.trim();
+  const prompt = document.getElementById('fPrompt').value.trim();
+  if (!title || !prompt) { alert('Título y prompt son obligatorios'); return; }
+  const now = new Date();
+  const ms = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const date = ms[now.getMonth()] + ' ' + now.getFullYear();
+  const id = document.getElementById('fId').value;
+  const data = {
+    title, date,
+    desc: document.getElementById('fDesc').value.trim(),
+    tool: document.getElementById('fTool').value,
+    cat: document.getElementById('fCat').value,
+    prompt,
+    icon: document.getElementById('fIcon').value || '✨',
+    img: document.getElementById('fImg').value.trim()
+  };
+  if (id) {
+    const i = prompts.findIndex(x => x.id === id);
+    if (i !== -1) prompts[i] = { ...prompts[i], ...data, isNew: false };
+  } else {
+    prompts.unshift({ id: 'p' + Date.now(), ...data, isNew: true });
+  }
+  save();
+  closeOvDirect('fOverlay');
+  renderAdminList();
+  render();
+}
+
+function delPrompt(id) {
+  if (!confirm('¿Eliminar este prompt?')) return;
+  prompts = prompts.filter(p => p.id !== id);
+  save();
+  renderAdminList();
+  render();
+}
+
+function changePass() {
+  const np = document.getElementById('newPass').value.trim();
+  if (!np || np.length < 4) { alert('Mínimo 4 caracteres'); return; }
+  setPass(np);
+  document.getElementById('newPass').value = '';
+  alert('Contraseña actualizada ✓');
+}
+
+// ── UTILS ────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closePModalDirect();
+    ['lOverlay','aOverlay','fOverlay'].forEach(closeOvDirect);
+  }
+});
+
+load();
+</script>
+</body>
+</html>

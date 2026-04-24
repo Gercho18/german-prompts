@@ -5,6 +5,10 @@
   path = "/prompt/*"
   function = "prompt"
 
+[[edge_functions]]
+  path = "/sitemap.xml"
+  function = "sitemap"
+
 [[redirects]]
   from = "/prompt/*"
   to = "/"

@@ -3,9 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Todos los prompts de IA que comparte @german.dsg en Instagram. Copiá y usá gratis.">
-<title>Prompts de IA · @german.dsg</title>
+<meta name="description" content="Prompts de IA gratis de @german.dsg. Copiá y usá prompts para Midjourney, ChatGPT, Magnific AI, Runway, Kling y más. Nuevos cada semana.">
+<title>Prompts de IA gratis · @german.dsg</title>
+
+<!-- Preconnects -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://i.ibb.co">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prompts de @german.dsg">
+<meta property="og:title" content="Prompts de IA gratis · @german.dsg">
+<meta property="og:description" content="Prompts de IA gratis de @german.dsg. Copiá y usá prompts para Midjourney, ChatGPT, Magnific AI, Runway, Kling y más.">
+<meta property="og:url" content="https://german-prompts.netlify.app">
+<meta property="og:image" content="https://german-prompts.netlify.app/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prompts de IA gratis · @german.dsg">
+<meta name="twitter:description" content="Prompts de IA gratis de @german.dsg. Copiá y usá prompts para Midjourney, ChatGPT, Magnific AI, Runway, Kling y más.">
+<meta name="twitter:image" content="https://german-prompts.netlify.app/og-image.svg">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -541,7 +562,7 @@ function renderGrid(list) {
     const gc = gradClass(prompts.indexOf(p));
     const hasImg = p.img && p.img.trim().length > 0;
     const thumbHtml = hasImg
-      ? `<img class="thumb-img" src="${esc(p.img)}" alt="" onload="this.classList.add('loaded')" onerror="this.style.display='none'">`
+      ? `<img class="thumb-img" src="${esc(p.img)}" alt="${esc(p.title)}" loading="lazy" decoding="async" onload="this.classList.add('loaded')" onerror="this.style.display='none'">`
       : '';
     return `<div class="card" onclick="openPrompt('${p.id}')" style="animation:fadeUp .4s ${i * .07}s ease both">
       <div class="thumb ${gc}">
@@ -582,6 +603,9 @@ function openPrompt(id) {
   const mi = document.getElementById('mThumbImg');
   if (hasImg) {
     mi.src = p.img;
+    mi.alt = p.title;
+    mi.loading = 'lazy';
+    mi.decoding = 'async';
     mi.classList.remove('loaded');
     mi.onload = () => mi.classList.add('loaded');
     mi.onerror = () => { mi.style.display = 'none'; document.getElementById('mThumbGrad').style.display = ''; };

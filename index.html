@@ -47,6 +47,19 @@ canvas#bg-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:no
 @keyframes shimmer{0%{background-position:0% center}100%{background-position:200% center}}
 .hdr-sub{font-size:13px;font-weight:300;color:var(--mu);line-height:1.6;max-width:360px;margin:0 auto}
 
+/* SEARCH + FILTERS */
+.search-row{display:flex;gap:10px;margin-bottom:14px;animation:fadeUp .5s .1s ease both}
+.search-wrap{flex:1;position:relative}
+.search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--mu);pointer-events:none;flex-shrink:0}
+.search-input{width:100%;background:var(--s1);border:1px solid var(--b1);border-radius:99px;padding:7px 14px 7px 34px;color:var(--tx);font-family:'Inter',sans-serif;font-size:12px;outline:none;transition:border .18s}
+.search-input::placeholder{color:var(--mu)}
+.search-input:focus{border-color:rgba(240,200,58,.35)}
+.cats{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:24px;animation:fadeUp .5s .15s ease both}
+.cat-btn{padding:5px 13px;border-radius:99px;border:1px solid var(--b1);background:transparent;color:var(--mu);font-family:'Inter',sans-serif;font-size:11px;font-weight:500;cursor:pointer;transition:all .18s;letter-spacing:.02em}
+.cat-btn:hover{color:var(--tx);border-color:var(--b2)}
+.cat-btn.on{background:var(--ys);border-color:var(--b2);color:var(--y)}
+.results-info{font-size:11px;color:var(--di);text-align:center;margin-bottom:16px;min-height:16px}
+
 /* GRID */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;animation:fadeUp .5s .15s ease both}
 @media(max-width:460px){.grid{grid-template-columns:1fr}}
@@ -175,6 +188,14 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
     <h1 class="hdr-name">Prompts <em>gratis</em></h1>
     <p class="hdr-sub">Acá vas a encontrar todos los prompts que utilizo en mi día a día. Solo tenés que elegir el que querés, lo copiás y lo utilizás en el modelo que quieras!</p>
   </div>
+  <div class="search-row">
+    <div class="search-wrap">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Buscar por título, descripción o herramienta..." oninput="applyFilters()">
+    </div>
+  </div>
+  <div class="cats" id="catBar"></div>
+  <div class="results-info" id="resultsInfo"></div>
   <div class="grid" id="grid">
     <div class="empty"><div class="empty-icon">✦</div>Cargando...</div>
   </div>
@@ -333,7 +354,7 @@ const SK = 'german_prompts_v2';
 const PK = 'german_pass_v2';
 const DEF_PASS = 'german2025';
 const GRADS = ['g0','g1','g2','g3','g4','g5'];
-let prompts = [], activePrompt = null;
+let prompts = [], activePrompt = null, activeCat = 'all';
 
 // ── PROMPTS PUBLICADOS ───────────────────────────────────────────
 // Este array es el que ven todos los visitantes.
@@ -381,15 +402,51 @@ function exportHTML() {
 }
 
 // ── RENDER ───────────────────────────────────────────────────────
-function render() { renderGrid(); }
+function render() { renderCats(); applyFilters(); }
+
+function getCats() { return [...new Set(prompts.map(p => p.cat).filter(Boolean))]; }
+
+function renderCats() {
+  const cats = getCats();
+  document.getElementById('catBar').innerHTML =
+    `<button class="cat-btn ${activeCat==='all'?'on':''}" onclick="setCat('all',this)">Todos</button>` +
+    cats.map(c => `<button class="cat-btn ${activeCat===c?'on':''}" onclick="setCat('${esc(c)}',this)">${esc(c)}</button>`).join('');
+}
+
+function setCat(c, btn) {
+  activeCat = c;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+  let list = activeCat === 'all' ? prompts : prompts.filter(p => p.cat === activeCat);
+  if (q) list = list.filter(p =>
+    p.title.toLowerCase().includes(q) ||
+    (p.desc || '').toLowerCase().includes(q) ||
+    (p.tool || '').toLowerCase().includes(q)
+  );
+  const info = document.getElementById('resultsInfo');
+  if (q || activeCat !== 'all') {
+    info.textContent = list.length === 0 ? 'Sin resultados' : `${list.length} prompt${list.length !== 1 ? 's' : ''}`;
+  } else {
+    info.textContent = '';
+  }
+  renderGrid(list);
+}
 
 function gradClass(idx) { return GRADS[idx % GRADS.length]; }
 
-function renderGrid() {
+function renderGrid(list) {
+  if (list === undefined) list = prompts;
   const g = document.getElementById('grid');
-  const list = prompts;
   if (!list.length) {
-    g.innerHTML = `<div class="empty"><div class="empty-icon">✦</div>No hay prompts todavía.<br>Agregá el primero desde el panel admin.</div>`;
+    const msg = (document.getElementById('searchInput')?.value || '').trim() || activeCat !== 'all'
+      ? 'No encontramos prompts con ese filtro.'
+      : 'No hay prompts todavía.<br>Agregá el primero desde el panel admin.';
+    g.innerHTML = `<div class="empty"><div class="empty-icon">✦</div>${msg}</div>`;
     return;
   }
   g.innerHTML = list.map((p, i) => {

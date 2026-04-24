@@ -48,7 +48,7 @@ canvas#bg-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:no
 .hdr-sub{font-size:13px;font-weight:300;color:var(--mu);line-height:1.6;max-width:360px;margin:0 auto}
 
 /* SEARCH + FILTERS */
-.search-row{display:flex;gap:10px;margin-bottom:14px;animation:fadeUp .5s .1s ease both}
+.search-row{display:flex;gap:8px;align-items:center;margin-bottom:14px;animation:fadeUp .5s .1s ease both}
 .search-wrap{flex:1;position:relative}
 .search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--mu);pointer-events:none;flex-shrink:0}
 .search-input{width:100%;background:var(--s1);border:1px solid var(--b1);border-radius:99px;padding:7px 14px 7px 34px;color:var(--tx);font-family:'Inter',sans-serif;font-size:12px;outline:none;transition:border .18s}
@@ -60,9 +60,41 @@ canvas#bg-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:no
 .cat-btn.on{background:var(--ys);border-color:var(--b2);color:var(--y)}
 .results-info{font-size:11px;color:var(--di);text-align:center;margin-bottom:16px;min-height:16px}
 
+/* VIEW TOGGLE */
+.view-toggle{display:flex;gap:2px;background:var(--s1);border:1px solid var(--b1);border-radius:8px;padding:2px;flex-shrink:0}
+.view-btn{width:28px;height:28px;border-radius:5px;border:none;background:transparent;color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.view-btn.on{background:var(--s3);color:var(--y)}
+
 /* GRID */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;animation:fadeUp .5s .15s ease both}
 @media(max-width:460px){.grid{grid-template-columns:1fr}}
+
+/* LIST VIEW */
+.grid.list-view{grid-template-columns:1fr;gap:8px}
+.grid.list-view .card{display:flex;flex-direction:row}
+.grid.list-view .card:hover{transform:translateX(4px) scale(1);border-color:var(--b2);box-shadow:0 4px 20px rgba(0,0,0,.3),0 0 20px rgba(240,200,58,0.06)}
+.grid.list-view .card::after{background:linear-gradient(90deg,rgba(240,200,58,0.03) 0%,transparent 60%)}
+.grid.list-view .thumb{width:96px;min-width:96px;height:72px;aspect-ratio:unset;flex-shrink:0}
+.grid.list-view .thumb-tag{display:none}
+.grid.list-view .cbody{padding:10px 14px;display:flex;flex-direction:column;justify-content:center;flex:1;min-width:0}
+.grid.list-view .c-desc{-webkit-line-clamp:1}
+.grid.list-view .c-footer{margin-top:6px;padding-top:6px}
+.grid.list-view .thumb-new{top:6px;right:6px;font-size:8px;padding:2px 6px}
+
+/* SKELETON */
+@keyframes skelShimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.skel{background:var(--s1);border:1px solid var(--b1);border-radius:14px;overflow:hidden;animation:fadeUp .3s ease both}
+.skel-thumb{width:100%;aspect-ratio:16/9;background:linear-gradient(90deg,var(--s1) 25%,var(--s3) 50%,var(--s1) 75%);background-size:200% 100%;animation:skelShimmer 1.5s ease infinite}
+.skel-body{padding:14px 16px 16px}
+.skel-line{height:9px;border-radius:99px;background:linear-gradient(90deg,var(--s1) 25%,var(--s3) 50%,var(--s1) 75%);background-size:200% 100%;animation:skelShimmer 1.5s ease infinite;margin-bottom:9px}
+.skel-line.s{width:35%}.skel-line.m{width:65%}.skel-line.l{width:90%}
+.grid.list-view .skel{display:flex}
+.grid.list-view .skel-thumb{width:96px;min-width:96px;height:72px;aspect-ratio:unset}
+.grid.list-view .skel-body{flex:1}
+
+/* COPY PARTICLES */
+.cp{position:fixed;width:5px;height:5px;border-radius:50%;pointer-events:none;z-index:9999;animation:cpFly var(--d,600ms) ease-out forwards}
+@keyframes cpFly{0%{transform:translate(0,0) scale(1);opacity:.9}100%{transform:translate(var(--tx,0px),var(--ty,-60px)) scale(0);opacity:0}}
 
 /* CARD */
 .card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),border-color .25s,box-shadow .25s;position:relative}
@@ -192,6 +224,14 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
     <div class="search-wrap">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input class="search-input" id="searchInput" type="text" placeholder="Buscar por título, descripción o herramienta..." oninput="applyFilters()">
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn on" id="vGrid" onclick="setView('grid')" title="Grilla">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </button>
+      <button class="view-btn" id="vList" onclick="setView('list')" title="Lista">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
     </div>
   </div>
   <div class="cats" id="catBar"></div>
@@ -354,7 +394,7 @@ const SK = 'german_prompts_v2';
 const PK = 'german_pass_v2';
 const DEF_PASS = 'german2025';
 const GRADS = ['g0','g1','g2','g3','g4','g5'];
-let prompts = [], activePrompt = null, activeCat = 'all';
+let prompts = [], activePrompt = null, activeCat = 'all', viewMode = 'grid';
 
 // ── PROMPTS PUBLICADOS ───────────────────────────────────────────
 // Este array es el que ven todos los visitantes.
@@ -362,14 +402,32 @@ let prompts = [], activePrompt = null, activeCat = 'all';
 const PUBLISHED = [{"id":"s1","title":"Restauración de foto a 4K","desc":"Para rescatar fotos antiguas, borrosas o comprimidas. Resultado fotorrealista.","tool":"Nano Banana 2","cat":"Restauración","icon":"🖼","img":"https://i.ibb.co/JFgVPYJ7/REFERENCE-IMAGE-Use-202604232053.jpg","prompt":"REFERENCE IMAGE: Use the uploaded image as the ONLY source of truth.\n\nPRIMARY OBJECTIVE (HIGHEST PRIORITY):\nEnhance image quality while preserving 100% of the original identity and scene.\n\nIDENTITY PRESERVATION (CRITICAL):\n- Maintain EXACT facial geometry (bone structure, proportions, symmetry, asymmetry)\n- Preserve exact expression, gaze, and micro-expressions\n- Do NOT modify face shape, features, or identity in any way\n- Keep natural skin characteristics (pores, texture, imperfections)\n- No beautification, no retouching that changes identity\n\nENVIRONMENT PRESERVATION (CRITICAL):\n- Background must remain EXACTLY the same\n- No changes in layout, composition, objects, or positioning\n- No additions, no removals, no replacements\n- Maintain original framing and perspective\n\nIMAGE ENHANCEMENT:\n- Increase sharpness and clarity while preserving natural texture\n- Improve dynamic range and tonal depth\n- Enhance micro-contrast and fine details\n- Clean compression artifacts without over-smoothing\n- Preserve realistic skin texture (no plastic look)\n\nLIGHTING (REFINEMENT, NOT CHANGE):\n- Maintain original light direction, intensity, and mood\n- Subtly refine into cinematic quality:\n  - smoother highlight rolloff\n  - slightly deeper shadows (no crush)\n  - gentle contrast enhancement\n- No artificial or dramatic lighting changes\n\nCAMERA SIMULATION:\n- Sony A1 full-frame look\n- 85mm f/1.4 lens rendering\n- f/1.6 aperture, ISO 100, 1/200\n- natural shallow depth of field\n- precise subject focus, realistic falloff\n\nCOLOR & TONE:\n- Neutral editorial color grading\n- Accurate skin tones\n- Natural saturation (no oversaturation)\n- Subtle cinematic contrast curve\n- 10-bit color depth look\n- soft film grain (very subtle)\n\nOUTPUT QUALITY:\n- 4K resolution\n- high detail retention\n- clean, professional, editorial finish\n\nSTRICT CONSTRAINTS:\n- identity preservation > everything else\n- environment preservation > everything else\n- enhancement must NOT alter original content\n- result must look like the SAME photo shot with a better camera\n\nNEGATIVE INSTRUCTIONS:\n- no background change\n- no new elements\n- no face alteration\n- no stylization\n- no artificial glow\n- no over-sharpening\n- no over-smoothing\n- no HDR exaggeration","date":"Abril 2025","isNew":true}];
 
 // ── STORAGE (localStorage) ───────────────────────────────────────
+function showSkeleton() {
+  const g = document.getElementById('grid');
+  const n = 4;
+  g.innerHTML = Array.from({length: n}, (_, i) =>
+    `<div class="skel" style="animation-delay:${i * .07}s">
+      <div class="skel-thumb"></div>
+      <div class="skel-body">
+        <div class="skel-line s"></div>
+        <div class="skel-line m"></div>
+        <div class="skel-line l"></div>
+      </div>
+    </div>`
+  ).join('');
+}
+
 function load() {
-  try {
-    const r = localStorage.getItem(SK);
-    prompts = r ? JSON.parse(r) : [...PUBLISHED];
-  } catch(e) {
-    prompts = [...PUBLISHED];
-  }
-  render();
+  showSkeleton();
+  requestAnimationFrame(() => {
+    try {
+      const r = localStorage.getItem(SK);
+      prompts = r ? JSON.parse(r) : [...PUBLISHED];
+    } catch(e) {
+      prompts = [...PUBLISHED];
+    }
+    render();
+  });
 }
 
 function save() {
@@ -401,8 +459,22 @@ function exportHTML() {
   URL.revokeObjectURL(a.href);
 }
 
+// ── VIEW TOGGLE ───────────────────────────────────────────────────
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('grid').classList.toggle('list-view', mode === 'list');
+  document.getElementById('vGrid').classList.toggle('on', mode === 'grid');
+  document.getElementById('vList').classList.toggle('on', mode === 'list');
+  try { localStorage.setItem('german_view', mode); } catch(e) {}
+}
+
 // ── RENDER ───────────────────────────────────────────────────────
-function render() { renderCats(); applyFilters(); }
+function render() {
+  const saved = localStorage.getItem('german_view');
+  if (saved && saved !== viewMode) setView(saved);
+  renderCats();
+  applyFilters();
+}
 
 function getCats() { return [...new Set(prompts.map(p => p.cat).filter(Boolean))]; }
 
@@ -508,10 +580,31 @@ function openPrompt(id) {
   document.body.style.overflow = 'hidden';
 }
 
+function spawnParticles(btn) {
+  const r = btn.getBoundingClientRect();
+  const ox = r.left + r.width / 2;
+  const oy = r.top + r.height / 2;
+  const colors = ['#F0C83A','#ffe97a','#fff0a0','#E8B830'];
+  for (let i = 0; i < 12; i++) {
+    const el = document.createElement('div');
+    el.className = 'cp';
+    const angle = (Math.random() * 160 + 190) * (Math.PI / 180);
+    const dist = 30 + Math.random() * 55;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist;
+    const dur = 500 + Math.random() * 350;
+    const size = 3 + Math.random() * 4;
+    el.style.cssText = `left:${ox}px;top:${oy}px;width:${size}px;height:${size}px;background:${colors[i%colors.length]};--tx:${tx.toFixed(1)}px;--ty:${ty.toFixed(1)}px;--d:${dur}ms`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), dur + 50);
+  }
+}
+
 function doCopy() {
   if (!activePrompt) return;
   navigator.clipboard.writeText(activePrompt.prompt).then(() => {
     const btn = document.getElementById('copyBtn');
+    spawnParticles(btn);
     btn.className = 'copy-btn ok';
     btn.textContent = '✓ Copiado';
     setTimeout(() => {

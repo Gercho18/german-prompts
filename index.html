@@ -457,6 +457,8 @@ function load() {
       prompts = [...PUBLISHED];
     }
     render();
+    // precargar imágenes en background para que el modal sea instantáneo
+    prompts.forEach(p => { if (p.img) { const i = new Image(); i.src = p.img; } });
     // deep-link: si la URL es /prompt/slug, abrir ese prompt
     const match = window.location.pathname.match(/^\/prompt\/(.+)/);
     if (match) {

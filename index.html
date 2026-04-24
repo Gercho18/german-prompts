@@ -398,7 +398,7 @@ function renderGrid() {
     return `<div class="card" onclick="openPrompt('${p.id}')" style="animation:fadeUp .4s ${i * .07}s ease both">
       <div class="thumb ${gc}">
         ${thumbHtml}
-        <div class="thumb-gradient"><div class="thumb-icon">${p.icon || '✨'}</div></div>
+        ${!hasImg ? `<div class="thumb-gradient"><div class="thumb-icon">${p.icon || '✨'}</div></div>` : ''}
         <div class="thumb-shine"></div>
         <div class="thumb-tag">${esc(p.cat)}</div>
         ${p.isNew ? '<div class="thumb-new">Nuevo</div>' : ''}
@@ -426,15 +426,17 @@ function openPrompt(id) {
   document.getElementById('mDesc').textContent = p.desc || '';
   document.getElementById('mPrompt').textContent = p.prompt;
   document.getElementById('mDate').textContent = p.date || '';
-  document.getElementById('mThumbIcon').textContent = p.icon || '✨';
   const gi = prompts.indexOf(p);
+  const hasImg = p.img && p.img.trim().length > 0;
+  document.getElementById('mThumbIcon').textContent = p.icon || '✨';
+  document.getElementById('mThumbGrad').style.display = hasImg ? 'none' : '';
   document.getElementById('mThumbGrad').className = 'modal-thumb-gradient ' + gradClass(gi);
   const mi = document.getElementById('mThumbImg');
-  if (p.img && p.img.trim()) {
+  if (hasImg) {
     mi.src = p.img;
     mi.classList.remove('loaded');
     mi.onload = () => mi.classList.add('loaded');
-    mi.onerror = () => mi.style.display = 'none';
+    mi.onerror = () => { mi.style.display = 'none'; document.getElementById('mThumbGrad').style.display = ''; };
   } else {
     mi.classList.remove('loaded');
     mi.src = '';

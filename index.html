@@ -233,6 +233,20 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
 .g3{background:linear-gradient(135deg,#0e1a12 0%,#152b1c 50%,#0a1410 100%)}
 .g4{background:linear-gradient(135deg,#1f0f0a 0%,#3a1808 50%,#180a06 100%)}
 .g5{background:linear-gradient(135deg,#0f1418 0%,#1d2d3a 50%,#0b1018 100%)}
+
+/* COLLAGE THUMB */
+.thumb-collage{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);width:100%;height:100%}
+.thumb-collage-img{width:100%;height:100%;object-fit:cover;display:none}
+.thumb-collage-img.loaded{display:block}
+
+/* STYLE TABS */
+.style-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.style-tab{display:flex;align-items:center;gap:5px;padding:4px 9px;border-radius:7px;border:1px solid var(--b1);background:var(--s3);cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--mu);white-space:nowrap}
+.style-tab img{width:20px;height:20px;object-fit:cover;border-radius:3px;flex-shrink:0;display:none}
+.style-tab img.loaded{display:block}
+.style-tab:hover{color:var(--tx);border-color:var(--b2)}
+.style-tab.on{background:var(--ys);border-color:var(--b2);color:var(--y)}
+.prompt-label-sub{font-size:9px;color:var(--mu);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px;font-style:italic}
 </style>
 </head>
 <body>
@@ -282,9 +296,10 @@ textarea{resize:vertical;min-height:90px;line-height:1.6}
       <div class="modal-tool" id="mTool"></div>
       <div class="modal-title" id="mTitle"></div>
       <div class="modal-desc" id="mDesc"></div>
+      <div class="style-tabs" id="mStyleTabs" style="display:none"></div>
       <div class="prompt-box-wrap">
         <div class="prompt-box-hdr">
-          <span class="prompt-box-label">Prompt</span>
+          <span class="prompt-box-label">Prompt<span class="prompt-label-sub" id="mPromptLabel"></span></span>
           <button class="copy-btn" id="copyBtn" onclick="doCopy()">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
             Copiar prompt
@@ -424,12 +439,12 @@ const SK = 'german_prompts_v2';
 const PK = 'german_pass_v2';
 const DEF_PASS = 'german2025';
 const GRADS = ['g0','g1','g2','g3','g4','g5'];
-let prompts = [], activePrompt = null, activeCat = 'all', viewMode = 'grid';
+let prompts = [], activePrompt = null, activeSubPromptIdx = 0, activeCat = 'all', viewMode = 'grid';
 
 // ── PROMPTS PUBLICADOS ───────────────────────────────────────────
 // Este array es el que ven todos los visitantes.
 // Para actualizar: agregá prompts desde el panel admin → "↓ Publicar" → reemplazá este archivo en Netlify.
-const PUBLISHED = [{"id":"s1","title":"Restauración de foto a 4K","desc":"Para rescatar fotos antiguas, borrosas o comprimidas. Resultado fotorrealista.","tool":"Nano Banana 2","cat":"Restauración","icon":"🖼","img":"https://i.ibb.co/JFgVPYJ7/REFERENCE-IMAGE-Use-202604232053.jpg","prompt":"REFERENCE IMAGE: Use the uploaded image as the ONLY source of truth.\n\nPRIMARY OBJECTIVE (HIGHEST PRIORITY):\nEnhance image quality while preserving 100% of the original identity and scene.\n\nIDENTITY PRESERVATION (CRITICAL):\n- Maintain EXACT facial geometry (bone structure, proportions, symmetry, asymmetry)\n- Preserve exact expression, gaze, and micro-expressions\n- Do NOT modify face shape, features, or identity in any way\n- Keep natural skin characteristics (pores, texture, imperfections)\n- No beautification, no retouching that changes identity\n\nENVIRONMENT PRESERVATION (CRITICAL):\n- Background must remain EXACTLY the same\n- No changes in layout, composition, objects, or positioning\n- No additions, no removals, no replacements\n- Maintain original framing and perspective\n\nIMAGE ENHANCEMENT:\n- Increase sharpness and clarity while preserving natural texture\n- Improve dynamic range and tonal depth\n- Enhance micro-contrast and fine details\n- Clean compression artifacts without over-smoothing\n- Preserve realistic skin texture (no plastic look)\n\nLIGHTING (REFINEMENT, NOT CHANGE):\n- Maintain original light direction, intensity, and mood\n- Subtly refine into cinematic quality:\n  - smoother highlight rolloff\n  - slightly deeper shadows (no crush)\n  - gentle contrast enhancement\n- No artificial or dramatic lighting changes\n\nCAMERA SIMULATION:\n- Sony A1 full-frame look\n- 85mm f/1.4 lens rendering\n- f/1.6 aperture, ISO 100, 1/200\n- natural shallow depth of field\n- precise subject focus, realistic falloff\n\nCOLOR & TONE:\n- Neutral editorial color grading\n- Accurate skin tones\n- Natural saturation (no oversaturation)\n- Subtle cinematic contrast curve\n- 10-bit color depth look\n- soft film grain (very subtle)\n\nOUTPUT QUALITY:\n- 4K resolution\n- high detail retention\n- clean, professional, editorial finish\n\nSTRICT CONSTRAINTS:\n- identity preservation > everything else\n- environment preservation > everything else\n- enhancement must NOT alter original content\n- result must look like the SAME photo shot with a better camera\n\nNEGATIVE INSTRUCTIONS:\n- no background change\n- no new elements\n- no face alteration\n- no stylization\n- no artificial glow\n- no over-sharpening\n- no over-smoothing\n- no HDR exaggeration","date":"Abril 2025","isNew":true}];
+const PUBLISHED = [{"id":"p_linkedin_001","title":"Foto de perfil para LinkedIn","desc":"6 estilos cinematográficos para generar tu foto de perfil con IA. Subí tu foto y elegí el estilo.","tool":"ChatGPT","cat":"Generación","icon":"💼","type":"multi","imgs":["https://i.ibb.co/DPx9JLNK/1.jpg","https://i.ibb.co/prw08wFQ/2.jpg","https://i.ibb.co/kgbt0fH3/3.jpg","https://i.ibb.co/RGMxpm9d/4.jpg","https://i.ibb.co/j9bxtzVv/5.jpg","https://i.ibb.co/rGRQMgDn/6.jpg"],"prompts":[{"label":"Rojo editorial","img":"https://i.ibb.co/DPx9JLNK/1.jpg","prompt":"REFERENCE IMAGE: Use the uploaded image as the PRIMARY identity source. The generated subject MUST be the exact same person.\n\nCRITICAL IDENTITY LOCK (HIGHEST PRIORITY):\n- replicate EXACT facial structure (bone structure, jawline, cheekbones)\n- replicate EXACT eyes, eyebrows, nose, lips, proportions and asymmetry\n- preserve skin tone, texture, pores, and natural imperfections\n- DO NOT beautify, DO NOT stylize, DO NOT modify identity\n- facial identity must remain identical to reference across all generations\n\nCreate an ultra-realistic cinematic portrait of the SAME person.\n\nSTYLE:\n- dark, minimal, high-fashion editorial look\n- deep red monochromatic background\n- dramatic lighting with strong shadows\n- cinematic contrast, moody atmosphere\n\nLIGHTING:\n- strong directional light from one side (warm red/orange tone)\n- opposite side in soft shadow\n- subtle rim light separating subject from background\n- no flat lighting\n\nCAMERA:\n- close-up portrait\n- slightly low angle (hero perspective)\n- 85mm lens\n- shallow depth of field (f/1.8 – f/2.2)\n- sharp focus on eyes\n\nPOSE:\n- head slightly tilted\n- chin slightly raised\n- confident, calm expression\n- direct or slightly off-camera gaze\n\nSTYLING:\n- dark clothing (black coat, minimal outfit)\n- modern, clean aesthetic\n- optional glasses (natural fit to face)\n\nCOLOR:\n- dominant deep red background\n- natural skin tones preserved\n- subtle cinematic grading\n\nREALISM:\n- visible skin texture (no smoothing)\n- realistic lighting interaction\n- no CGI look\n\nOUTPUT:\n- Ultra HD 4K\n- cinematic portrait quality\n\nSTRICT:\n- same person, no variation\n- no text\n- no logos"},{"label":"Invierno","img":"https://i.ibb.co/prw08wFQ/2.jpg","prompt":"REFERENCE IMAGE: Use the uploaded image as inspiration for the person's general appearance, facial characteristics, and overall style.\n\nCreate an ultra-realistic cinematic winter editorial portrait inspired by premium outdoor fashion photography.\n\nSubject:\nA person inspired by the uploaded image, with realistic and natural human facial features, believable skin texture, authentic proportions, and subtle natural asymmetry. The portrait should feel visually connected to the uploaded appearance while remaining cinematic and artistic.\n\nPose & Expression:\nChest-up portrait, relaxed posture, head slightly turned away from the camera, eyes looking naturally off-frame. Calm, introspective expression.\n\nWardrobe:\nAdapt the clothing naturally based on the uploaded image while transforming it into a modern winter/streetwear aesthetic. Include realistic layered cold-weather clothing with detailed fabric textures, such as puffers, technical jackets, knit beanies, soft fleece, or winter outerwear.\n\nLighting:\nCold cinematic lighting with soft blue tones and directional contrast. Subtle side lighting creating realistic facial shadows and depth.\n\nBackground:\nMinimal dark or cool-toned gradient background with soft atmospheric falloff and cinematic depth.\n\nSkin & Texture Realism:\nVisible pores, realistic skin texture, natural imperfections, authentic hair strands, detailed fabric fibers, realistic stitching and textile detail.\n\nCamera & Optics:\nShot as if using a full-frame DSLR camera, 85mm portrait lens, f/2 aperture, shallow depth of field, cinematic bokeh.\n\nColor Grading:\nCool blue cinematic tones, subtle film grain, realistic contrast, slightly desaturated highlights, deep shadows.\n\nStyle:\nHyper-realistic editorial winter portrait photography, cinematic fashion realism, premium outdoor magazine aesthetic.\n\nQuality:\nUltra HD 4K, highly detailed, realistic lighting and texture, no CGI appearance.\n\nRestrictions:\nNo text, no logos, no watermark, no exaggerated beauty retouching, no cartoon style, no distorted facial proportions, no branding on clothing."},{"label":"Studio cálido","img":"https://i.ibb.co/kgbt0fH3/3.jpg","prompt":"REFERENCE IMAGE: Use the uploaded image as inspiration for facial characteristics and overall appearance.\n\nCreate an ultra-realistic cinematic portrait of the person in the uploaded image, inspired by modern editorial street photography.\n\nPose & Composition:\nThree-quarter body orientation, relaxed posture, head slightly turned away from the camera while maintaining a natural expression. Chest-up framing.\n\nStyling:\nModern casual clothing adapted naturally from the uploaded image. Minimal and clean styling with subtle cinematic fashion aesthetics.\n\nLighting:\nWarm cinematic studio lighting with soft shadows, subtle rim lighting, and natural depth.\n\nBackground:\nDark soft-gradient studio background with warm atmospheric tones and shallow depth of field.\n\nFacial Realism:\nHighly realistic human skin texture, visible pores, natural asymmetry, authentic hair texture, realistic eyes and subtle imperfections.\n\nCamera:\nFull-frame DSLR look, 85mm portrait lens, f/1.8 aperture, cinematic bokeh.\n\nColor Grading:\nWarm cinematic tones, subtle film grain, realistic contrast.\n\nStyle:\nHyper-realistic editorial portrait photography, premium cinematic look.\n\nQuality:\nUltra HD 4K, extremely detailed, natural realism.\n\nRestrictions:\nNo text, no logos, no watermark, no cartoon style, no exaggerated beauty retouching, no CGI look."},{"label":"Neón","img":"https://i.ibb.co/RGMxpm9d/4.jpg","prompt":"REFERENCE IMAGE: Use the uploaded image as inspiration for the person's general appearance, facial characteristics, and overall style.\n\nCreate an ultra-realistic cinematic neon portrait inspired by modern editorial photography and premium studio lighting.\n\nSubject:\nA person inspired by the uploaded image, maintaining believable human facial characteristics, realistic proportions, natural skin texture, subtle asymmetry, and authentic human detail. The portrait should feel visually connected to the uploaded appearance while remaining artistic and cinematic.\n\nPose & Composition:\nChest-up portrait framing, body slightly angled in a three-quarter orientation, head tilted slightly upward or turned subtly away from the camera. Calm, confident, introspective expression.\n\nWardrobe:\nAdapt the clothing naturally from the uploaded image while keeping the styling modern, minimal, and clean. Neutral fabrics with realistic folds and subtle texture.\n\nAccessories:\nIf glasses or accessories naturally fit the portrait style, include realistic reflections and optical behavior without exaggerated effects.\n\nLighting:\nSoft cinematic neon lighting with purple, magenta, and blue tones. Realistic light wrapping on skin, subtle rim lighting, smooth shadow transitions, and natural reflections.\n\nBackground:\nMinimal studio gradient background with soft neon glow and atmospheric depth.\n\nSkin & Facial Realism:\nVisible pores, realistic skin microtexture, natural imperfections, authentic eyelashes, detailed facial hair when applicable, realistic eye reflections, subtle peach fuzz.\n\nCamera & Optics:\nShot as if using a full-frame DSLR camera, 85mm portrait lens, f/1.8 aperture, shallow depth of field, cinematic bokeh.\n\nColor Grading:\nModern cinematic neon tones, subtle film grain, realistic contrast, soft highlight bloom, deep shadows.\n\nStyle:\nHyper-realistic editorial portrait photography, premium cyber-inspired cinematic realism, modern studio aesthetic.\n\nQuality:\nUltra HD 4K, highly detailed, natural realism, realistic optical behavior, no CGI appearance.\n\nRestrictions:\nNo text, no logos, no watermark, no exaggerated beauty retouching, no cartoon style, no distorted facial proportions, no branding on clothing."},{"label":"Verde lima","img":"https://i.ibb.co/j9bxtzVv/5.jpg","prompt":"REFERENCE IMAGE: Use the uploaded image as inspiration for the person's general appearance, visual characteristics, and overall style.\n\nCreate an ultra-realistic modern editorial portrait inspired by premium minimalist beauty photography.\n\nSubject:\nA person inspired by the uploaded image, with believable human facial characteristics, natural proportions, realistic skin texture, subtle asymmetry, and authentic facial detail. The portrait should feel visually connected to the uploaded appearance while remaining artistic and editorial.\n\nPose & Composition:\nChest-up portrait framing, body slightly angled in a three-quarter orientation, head subtly tilted upward or slightly turned away from the camera. Calm, confident, minimal expression.\n\nWardrobe:\nAdapt the clothing naturally based on the uploaded image while keeping the styling elegant, minimal, and modern. Clean neutral fabrics, subtle textures, premium editorial fashion aesthetic.\n\nLighting:\nSoft cinematic studio lighting with a strong colored side light in lime green tones. Smooth shadows, realistic skin reflections, subtle highlight transitions, natural depth.\n\nBackground:\nMinimal solid studio background in soft lime green or pastel neon green with smooth gradients and clean negative space.\n\nSkin & Facial Realism:\nVisible pores, realistic skin microtexture, natural imperfections, subtle peach fuzz, authentic eyelashes, realistic eye reflections, detailed hair strands.\n\nCamera & Optics:\nShot as if using a full-frame DSLR camera, 85mm portrait lens, f/2 aperture, shallow depth of field, cinematic clarity.\n\nColor Grading:\nModern editorial color grading with soft neon green highlights, balanced skin tones, subtle contrast, realistic dynamic range, soft film grain.\n\nStyle:\nHyper-realistic beauty/editorial portrait photography, premium fashion campaign aesthetic, cinematic studio realism.\n\nQuality:\nUltra HD 4K, highly detailed, realistic optical behavior, natural human realism, no CGI appearance.\n\nRestrictions:\nNo text, no logos, no watermark, no exaggerated beauty retouching, no cartoon style, no distorted anatomy, no branding on clothing."},{"label":"Studio gris","img":"https://i.ibb.co/rGRQMgDn/6.jpg","prompt":"Ultra-realistic 4K studio portrait, 4:5 aspect ratio, using the uploaded reference image as the identity source.\n\nPreserve the exact facial identity: maintain identical facial structure, bone proportions, skin tone, eye shape, nose shape, lips, eyebrows, hairline, hairstyle, facial hair (if present), and all unique facial characteristics. Do not beautify, stylize, exaggerate, or modify any facial features. Absolute identity accuracy required.\n\nPose: subject seated in a relaxed natural posture, upper body slightly leaning forward, shoulders relaxed. Head facing camera with soft natural eye contact. Neutral expression or subtle natural smile consistent with the reference personality.\n\nWardrobe: maintain and adapt the clothing style seen in the uploaded reference image. Preserve the same garment type, color family, and general style, but enhance fabric realism, texture detail, and natural folds. No logos unless present in the reference. Do not change outfit category.\n\nBackground: clean light gray seamless studio background.\n\nLighting: soft diffused professional studio lighting from the front with gentle natural shadows, even exposure, realistic skin tones, subtle shadow under chin, natural light falloff.\n\nFraming: medium close-up (mid-torso upward), centered composition.\n\nStyle: hyper-realistic photography, visible skin texture and pores, sharp eye focus, realistic textile detail, shallow depth of field, professional portrait photography quality, no filters, no stylization.\n\nStrict realism. Preserve identity. Do not alter facial proportions."}],"date":"Mayo 2025","isNew":true},{"id":"s1","title":"Restauración de foto a 4K","desc":"Para rescatar fotos antiguas, borrosas o comprimidas. Resultado fotorrealista.","tool":"Nano Banana 2","cat":"Restauración","icon":"🖼","img":"https://i.ibb.co/JFgVPYJ7/REFERENCE-IMAGE-Use-202604232053.jpg","prompt":"REFERENCE IMAGE: Use the uploaded image as the ONLY source of truth.\n\nPRIMARY OBJECTIVE (HIGHEST PRIORITY):\nEnhance image quality while preserving 100% of the original identity and scene.\n\nIDENTITY PRESERVATION (CRITICAL):\n- Maintain EXACT facial geometry (bone structure, proportions, symmetry, asymmetry)\n- Preserve exact expression, gaze, and micro-expressions\n- Do NOT modify face shape, features, or identity in any way\n- Keep natural skin characteristics (pores, texture, imperfections)\n- No beautification, no retouching that changes identity\n\nENVIRONMENT PRESERVATION (CRITICAL):\n- Background must remain EXACTLY the same\n- No changes in layout, composition, objects, or positioning\n- No additions, no removals, no replacements\n- Maintain original framing and perspective\n\nIMAGE ENHANCEMENT:\n- Increase sharpness and clarity while preserving natural texture\n- Improve dynamic range and tonal depth\n- Enhance micro-contrast and fine details\n- Clean compression artifacts without over-smoothing\n- Preserve realistic skin texture (no plastic look)\n\nLIGHTING (REFINEMENT, NOT CHANGE):\n- Maintain original light direction, intensity, and mood\n- Subtly refine into cinematic quality:\n  - smoother highlight rolloff\n  - slightly deeper shadows (no crush)\n  - gentle contrast enhancement\n- No artificial or dramatic lighting changes\n\nCAMERA SIMULATION:\n- Sony A1 full-frame look\n- 85mm f/1.4 lens rendering\n- f/1.6 aperture, ISO 100, 1/200\n- natural shallow depth of field\n- precise subject focus, realistic falloff\n\nCOLOR & TONE:\n- Neutral editorial color grading\n- Accurate skin tones\n- Natural saturation (no oversaturation)\n- Subtle cinematic contrast curve\n- 10-bit color depth look\n- soft film grain (very subtle)\n\nOUTPUT QUALITY:\n- 4K resolution\n- high detail retention\n- clean, professional, editorial finish\n\nSTRICT CONSTRAINTS:\n- identity preservation > everything else\n- environment preservation > everything else\n- enhancement must NOT alter original content\n- result must look like the SAME photo shot with a better camera\n\nNEGATIVE INSTRUCTIONS:\n- no background change\n- no new elements\n- no face alteration\n- no stylization\n- no artificial glow\n- no over-sharpening\n- no over-smoothing\n- no HDR exaggeration","date":"Abril 2025","isNew":true}];
 
 // ── STORAGE (localStorage) ───────────────────────────────────────
 function showSkeleton() {
@@ -458,7 +473,10 @@ function load() {
     }
     render();
     // precargar imágenes en background para que el modal sea instantáneo
-    prompts.forEach(p => { if (p.img) { const i = new Image(); i.src = p.img; } });
+    prompts.forEach(p => {
+      if (p.type === 'multi') { (p.imgs || []).forEach(url => { const im = new Image(); im.src = url; }); }
+      else if (p.img) { const im = new Image(); im.src = p.img; }
+    });
     // deep-link: si la URL es /prompt/slug, abrir ese prompt
     const match = window.location.pathname.match(/^\/prompt\/(.+)/);
     if (match) {
@@ -562,10 +580,18 @@ function renderGrid(list) {
   }
   g.innerHTML = list.map((p, i) => {
     const gc = gradClass(prompts.indexOf(p));
-    const hasImg = p.img && p.img.trim().length > 0;
-    const thumbHtml = hasImg
-      ? `<img class="thumb-img" src="${esc(p.img)}" alt="${esc(p.title)}" decoding="async" onload="this.classList.add('loaded')" onerror="this.style.display='none'">`
-      : '';
+    let thumbHtml, hasImg;
+    if (p.type === 'multi' && p.imgs && p.imgs.length) {
+      hasImg = true;
+      thumbHtml = `<div class="thumb-collage">${p.imgs.map(url =>
+        `<img class="thumb-collage-img" src="${esc(url)}" alt="" decoding="async" onload="this.classList.add('loaded')" onerror="this.style.display='none'">`
+      ).join('')}</div>`;
+    } else {
+      hasImg = !!(p.img && p.img.trim().length > 0);
+      thumbHtml = hasImg
+        ? `<img class="thumb-img" src="${esc(p.img)}" alt="${esc(p.title)}" decoding="async" onload="this.classList.add('loaded')" onerror="this.style.display='none'">`
+        : '';
+    }
     return `<div class="card" onclick="openPrompt('${p.id}')" style="animation:fadeUp .4s ${i * .07}s ease both">
       <div class="thumb ${gc}">
         ${thumbHtml}
@@ -595,32 +621,79 @@ function openPrompt(id) {
   document.getElementById('mTool').textContent = p.tool + ' · ' + p.cat;
   document.getElementById('mTitle').textContent = p.title;
   document.getElementById('mDesc').textContent = p.desc || '';
-  document.getElementById('mPrompt').textContent = p.prompt;
   document.getElementById('mDate').textContent = p.date || '';
   const gi = prompts.indexOf(p);
-  const hasImg = p.img && p.img.trim().length > 0;
-  document.getElementById('mThumbIcon').textContent = p.icon || '✨';
-  document.getElementById('mThumbGrad').style.display = hasImg ? 'none' : '';
-  document.getElementById('mThumbGrad').className = 'modal-thumb-gradient ' + gradClass(gi);
-  const mi = document.getElementById('mThumbImg');
-  if (hasImg) {
-    mi.src = p.img;
+  const tabs = document.getElementById('mStyleTabs');
+  const svgCopy = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>`;
+  if (p.type === 'multi' && p.prompts && p.prompts.length) {
+    activeSubPromptIdx = 0;
+    tabs.style.display = '';
+    tabs.innerHTML = p.prompts.map((sub, i) =>
+      `<button class="style-tab${i===0?' on':''}" onclick="selectStyle(${i})">` +
+      `<img src="${esc(sub.img)}" alt="" decoding="async" onload="this.classList.add('loaded')" onerror="this.style.display='none'">` +
+      `${esc(sub.label)}</button>`
+    ).join('');
+    document.getElementById('mPrompt').textContent = p.prompts[0].prompt;
+    document.getElementById('mPromptLabel').textContent = '· ' + p.prompts[0].label;
+    const mi = document.getElementById('mThumbImg');
+    mi.style.display = '';
+    mi.classList.remove('loaded');
+    mi.src = p.prompts[0].img;
     mi.alt = p.title;
     mi.loading = 'eager';
     mi.decoding = 'async';
-    mi.classList.remove('loaded');
     mi.onload = () => mi.classList.add('loaded');
     mi.onerror = () => { mi.style.display = 'none'; document.getElementById('mThumbGrad').style.display = ''; };
+    document.getElementById('mThumbGrad').style.display = 'none';
+    document.getElementById('mThumbIcon').textContent = p.icon || '✨';
   } else {
-    mi.classList.remove('loaded');
-    mi.src = '';
+    tabs.style.display = 'none';
+    document.getElementById('mPrompt').textContent = p.prompt;
+    document.getElementById('mPromptLabel').textContent = '';
+    const hasImg = p.img && p.img.trim().length > 0;
+    document.getElementById('mThumbIcon').textContent = p.icon || '✨';
+    document.getElementById('mThumbGrad').style.display = hasImg ? 'none' : '';
+    document.getElementById('mThumbGrad').className = 'modal-thumb-gradient ' + gradClass(gi);
+    const mi = document.getElementById('mThumbImg');
+    if (hasImg) {
+      mi.style.display = '';
+      mi.src = p.img;
+      mi.alt = p.title;
+      mi.loading = 'eager';
+      mi.decoding = 'async';
+      mi.classList.remove('loaded');
+      mi.onload = () => mi.classList.add('loaded');
+      mi.onerror = () => { mi.style.display = 'none'; document.getElementById('mThumbGrad').style.display = ''; };
+    } else {
+      mi.classList.remove('loaded');
+      mi.src = '';
+    }
   }
   const cb = document.getElementById('copyBtn');
   cb.className = 'copy-btn';
-  cb.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copiar prompt`;
+  cb.innerHTML = svgCopy + ' Copiar prompt';
   history.pushState({ promptId: p.id }, '', `/prompt/${toSlug(p.title)}`);
   document.getElementById('pOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+function selectStyle(idx) {
+  if (!activePrompt || activePrompt.type !== 'multi') return;
+  activeSubPromptIdx = idx;
+  const sub = activePrompt.prompts[idx];
+  document.querySelectorAll('#mStyleTabs .style-tab').forEach((t, i) => t.classList.toggle('on', i === idx));
+  document.getElementById('mPrompt').textContent = sub.prompt;
+  document.getElementById('mPromptLabel').textContent = '· ' + sub.label;
+  const mi = document.getElementById('mThumbImg');
+  mi.style.display = '';
+  mi.classList.remove('loaded');
+  mi.src = sub.img;
+  mi.onload = () => mi.classList.add('loaded');
+  mi.onerror = () => { mi.style.display = 'none'; };
+  document.getElementById('mThumbGrad').style.display = 'none';
+  const cb = document.getElementById('copyBtn');
+  cb.className = 'copy-btn';
+  cb.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copiar prompt`;
 }
 
 function spawnParticles(btn) {
@@ -645,7 +718,10 @@ function spawnParticles(btn) {
 
 function doCopy() {
   if (!activePrompt) return;
-  navigator.clipboard.writeText(activePrompt.prompt).then(() => {
+  const text = (activePrompt.type === 'multi' && activePrompt.prompts)
+    ? activePrompt.prompts[activeSubPromptIdx].prompt
+    : activePrompt.prompt;
+  navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById('copyBtn');
     spawnParticles(btn);
     btn.className = 'copy-btn ok';
